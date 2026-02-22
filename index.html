@@ -1059,7 +1059,7 @@ footer{
           <div><div class="contact-link-label">WhatsApp</div><div class="contact-link-val">Chat with us instantly</div></div>
           <i class="fa-solid fa-arrow-right c-arrow"></i>
         </a>
-        <a class="contact-link" href="mailto:astruxmarketing@outlook.com" target="_blank" rel="noopener">
+        <a class="contact-link" href="/cdn-cgi/l/email-protection#0362707771767b6e62716866776a6d64436c76776f6c6c682d606c6e" target="_blank" rel="noopener">
           <div class="contact-icon" style="background:rgba(255,171,0,.1)"><i class="fa-regular fa-envelope" style="color:var(--orange);font-size:1.05rem"></i></div>
           <div><div class="contact-link-label">Email</div><div class="contact-link-val">Send us a message</div></div>
           <i class="fa-solid fa-arrow-right c-arrow"></i>
@@ -1092,7 +1092,7 @@ footer{
   <div class="footer-socials">
     <a class="footer-social" href="https://wa.me/919136165601" target="_blank" rel="noopener" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
     <a class="footer-social" href="https://t.me/wvzse" target="_blank" rel="noopener" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
-    <a class="footer-social" href="mailto:astruxmarketing@outlook.com" title="Email"><i class="fa-regular fa-envelope"></i></a>
+    <a class="footer-social" href="/cdn-cgi/l/email-protection#117062656364697c70637a7465787f76517e64657d7e7e7a3f727e7c" title="Email"><i class="fa-regular fa-envelope"></i></a>
   </div>
 </footer>
 
@@ -1103,7 +1103,7 @@ footer{
     <div class="popup-opts">
       <a class="popup-opt" href="https://wa.me/919136165601" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" style="color:#25D366"></i>WhatsApp</a>
       <a class="popup-opt" href="https://t.me/wvzse" target="_blank" rel="noopener"><i class="fa-brands fa-telegram" style="color:#2CA5E0"></i>Telegram</a>
-      <a class="popup-opt" href="mailto:astruxmarketing@outlook.com"><i class="fa-regular fa-envelope" style="color:var(--orange)"></i>Email</a>
+      <a class="popup-opt" href="/cdn-cgi/l/email-protection#e9889a9d9b9c9184889b828c9d80878ea9869c9d85868682c78a8684"><i class="fa-regular fa-envelope" style="color:var(--orange)"></i>Email</a>
       <button class="popup-opt" onclick="openModal(event);closePopup()"><i class="fa-solid fa-rocket" style="color:var(--red)"></i>Request Demo</button>
     </div>
   </div>
@@ -1172,7 +1172,7 @@ footer{
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ─── NAV ─── */
 window.addEventListener('scroll',()=>{
   document.getElementById('navbar').classList.toggle('scrolled',scrollY>50)
@@ -1415,23 +1415,12 @@ async function handleSubmit(){
   btn.disabled=true;
   btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
 
-  const msg=`New Demo Request from Astrux Marketing\n\nType: ${picked}\nName: ${name}\nContact: ${contact}\nDetails: ${details||'Not provided'}\nBudget: ${budget||'Not specified'}`;
   try{
-    const token=typeof TELEGRAM_BOT_TOKEN!=='undefined'?TELEGRAM_BOT_TOKEN:'';
-    const chatId=typeof TELEGRAM_CHAT_ID!=='undefined'?TELEGRAM_CHAT_ID:'';
-    if(token&&chatId){
-      await fetch(`https://api.telegram.org/bot${token}/sendMessage`,{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({chat_id:chatId,text:msg})
-      });
-    }
+    const res=await fetch('/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({type:picked,name,contact,details,budget})
+    });
+    const data=await res.json();
+    if(!data.ok)throw new Error(data.error);
   }catch(err){}
-
-  document.getElementById('demoFormBody').style.display='none';
-  document.getElementById('successState').style.display='block';
-  btn.disabled=false;
-  btn.innerHTML='<i class="fa-regular fa-paper-plane"></i> Send My Request';
-}
-</script>
-</body>
-</html>
