@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ASTRUX5 Portfolio | Premium Dental Websites</title>
+<meta name="description" content="Explore our collection of luxury dental clinic websites deployed on Cloudflare Pages. Industry-leading design and performance." />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dark: #9A7B32;
+    --slate: #0D1117;
+    --slate-mid: #161B22;
+    --slate-light: #21262D;
+    --slate-border: #30363D;
+    --white: #F8F6F2;
+    --muted: #8B949E;
+    --cf-orange: #F38020;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--slate);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+    background: rgba(13, 17, 23, 0.85);
+    border-bottom: 1px solid var(--slate-border);
+    padding: 0 48px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: var(--slate);
+    font-size: 18px;
+  }
+
+  .logo span { color: var(--gold); }
+
+  .cf-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(243, 128, 32, 0.1);
+    border: 1px solid rgba(243, 128, 32, 0.3);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cf-orange);
+    letter-spacing: 0.5px;
+  }
+
+  .cf-logo {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 140px 48px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 50% at 50% 30%, rgba(201, 168, 76, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 5vw, 72px);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    letter-spacing: -1.5px;
+  }
+
+  .hero-h1 .gold { color: var(--gold-light); }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 640px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+
+  .filter-pills {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: 1px solid var(--slate-border);
+    background: var(--slate-mid);
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .pill:hover,
+  .pill.active {
+    border-color: var(--gold);
+    background: rgba(201, 168, 76, 0.08);
+    color: var(--gold);
+  }
+
+  /* ── PORTFOLIO GRID ── */
+  .portfolio {
+    padding: 80px 48px 120px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 32px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .project-card {
+    background: var(--slate-mid);
+    border: 1px solid var(--slate-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+  }
+
+  .project-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(201, 168, 76, 0.4);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201, 168, 76, 0.15);
+  }
+
+  .project-preview {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    background: var(--slate-light);
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .project-preview iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    pointer-events: none;
+    transform: scale(1);
+    transition: transform 0.3s;
+  }
+
+  .project-card:hover .project-preview iframe {
+    transform: scale(1.05);
+  }
+
+  .preview-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 0%, rgba(13, 17, 23, 0.9) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .project-card:hover .preview-overlay {
+    opacity: 1;
+  }
+
+  .preview-btn {
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: 200px;
+    justify-content: center;
+  }
+
+  .btn-live {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--slate);
+    box-shadow: 0 4px 20px rgba(201, 168, 76, 0.4);
+  }
+
+  .btn-live:hover {
+    box-shadow: 0 6px 30px rgba(201, 168, 76, 0.6);
+    transform: translateY(-2px);
+  }
+
+  .btn-code {
+    background: var(--slate-light);
+    border: 1px solid var(--slate-border);
+    color: var(--white);
+  }
+
+  .btn-code:hover {
+    border-color: var(--gold);
+    background: rgba(201, 168, 76, 0.08);
+  }
+
+  .project-info {
+    padding: 28px;
+  }
+
+  .project-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .project-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .tech-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .badge {
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .badge-primary { background: rgba(201, 168, 76, 0.15); color: var(--gold-light); }
+  .badge-cf { background: rgba(243, 128, 32, 0.15); color: var(--cf-orange); }
+  .badge-secondary { background: var(--slate-light); color: var(--muted); }
+
+  .project-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid var(--slate-border);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--slate-border);
+    padding: 60px 48px;
+    text-align: center;
+    background: var(--slate-mid);
+  }
+
+  .footer-cta {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .footer-cta span { color: var(--gold); }
+
+  .footer-desc {
+    font-size: 16px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--slate);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s;
+    box-shadow: 0 8px 24px rgba(201, 168, 76, 0.3);
+  }
+
+  .contact-btn:hover {
+    box-shadow: 0 12px 36px rgba(201, 168, 76, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .footer-bottom {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--slate-border);
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    header { padding: 0 24px; }
+    .cf-badge { display: none; }
+    .hero { padding: 120px 24px 60px; }
+    .portfolio { padding: 60px 24px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ────────── HEADER ────────── -->
+<header>
+  <a href="#" class="logo">
+    <div class="logo-icon">A5</div>
+    <span>ASTRUX<span>5</span> Studios</span>
+  </a>
+  <div class="cf-badge">
+    <svg class="cf-logo" viewBox="0 0 100 100" fill="currentColor">
+      <path d="M89.5 48.5c0-5.5-4.5-10-10-10h-2c-1-15-13.5-27-28.5-27-11.5 0-21.5 7-26 17-9.5 1-17 9-17 18.5 0 10.5 8.5 19 19 19h15v-20h-10l15-15 15 15h-10v20h29.5c5.5 0 10-4.5 10-10 0-5-3.5-9-8.5-9.5.5-1 .5-2 .5-3z"/>
+    </svg>
+    Powered by Cloudflare Pages
+  </div>
+</header>
+
+<!-- ────────── HERO ────────── -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Portfolio Showcase</div>
+    <h1 class="hero-h1">
+      Premium Dental Websites<br />
+      <span class="gold">Built for Speed & Conversion</span>
+    </h1>
+    <p class="hero-sub">
+      Explore our collection of luxury dental clinic websites deployed on Cloudflare's global edge network.
+      Every site delivers sub-second load times and converts visitors into patients.
+    </p>
+    <div class="filter-pills">
+      <button class="pill active" data-filter="all">All Projects</button>
+      <button class="pill" data-filter="luxury">Luxury Design</button>
+      <button class="pill" data-filter="booking">Online Booking</button>
+      <button class="pill" data-filter="ecommerce">E-commerce</button>
+    </div>
+  </div>
+</section>
+
+<!-- ────────── PORTFOLIO GRID ────────── -->
+<section class="portfolio">
+  <div class="grid" id="projectGrid"></div>
+</section>
+
+<!-- ────────── FOOTER CTA ────────── -->
+<footer>
+  <div class="footer-cta">Ready to Build Your<br /><span>Category-Defining</span> Dental Site?</div>
+  <p class="footer-desc">
+    Let's create something exceptional together. Premium design, global CDN performance, guaranteed results.
+  </p>
+  <a href="mailto:contact@astrux5.com" class="contact-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+      <polyline points="22,6 12,13 2,6" fill="none" stroke="currentColor" stroke-width="2"/>
+    </svg>
+    Start Your Project
+  </a>
+  <div class="footer-bottom">
+    © 2025 ASTRUX5 Studios. Deployed globally on Cloudflare Pages.
+  </div>
+</footer>
+
+<script>
+  // ═══════════════════════════════════════════════════════════
+  // PROJECT DATA — UPDATE WITH YOUR CLOUDFLARE PAGES URLS
+  // ═══════════════════════════════════════════════════════════
+  
+  const projects = [
+    {
+      id: 1,
+      title: 'Elite Dental Studio',
+      description: 'Luxury cosmetic dentistry with glassmorphism UI, Astro SSG, and conversion-optimized booking flow. Built for performance.',
+      tags: ['luxury', 'booking'],
+      tech: ['Astro.js', 'Tailwind CSS', 'Cloudflare Pages'],
+      liveUrl: 'https://websitedentist.pages.dev',  // ← YOUR CLOUDFLARE PAGES URL
+      codeUrl: 'https://github.com/ASTRUX5/websitedentist',
+      featured: true,
+    },
+    {
+      id: 2,
+      title: 'SmileWorks Dental',
+      description: 'Modern practice site with interactive service cards, before/after galleries, and integrated appointment booking.',
+      tags: ['luxury', 'booking'],
+      tech: ['HTML5', 'CSS Grid', 'JavaScript'],
+      liveUrl: 'https://smileworks-dental.pages.dev',  // ← REPLACE WITH YOUR URL
+      codeUrl: 'https://github.com/ASTRUX5/smileworks-dental',
+      featured: false,
+    },
+    {
+      id: 3,
+      title: 'Bright Dental Care',
+      description: 'Clean, minimalist design with patient portal integration, insurance verification, and HIPAA-compliant forms.',
+      tags: ['booking'],
+      tech: ['React', 'Tailwind', 'Cloudflare Pages'],
+      liveUrl: 'https://bright-dental.pages.dev',  // ← REPLACE
+      codeUrl: 'https://github.com/ASTRUX5/bright-dental',
+      featured: false,
+    },
+    {
+      id: 4,
+      title: 'Pearl Orthodontics',
+      description: 'High-end orthodontics practice featuring Invisalign calculators, 3D treatment simulations, and financing options.',
+      tags: ['luxury', 'ecommerce'],
+      tech: ['Next.js', 'Stripe', 'Cloudflare Pages'],
+      liveUrl: 'https://pearl-orthodontics.pages.dev',  // ← REPLACE
+      codeUrl: 'https://github.com/ASTRUX5/pearl-orthodontics',
+      featured: false,
+    },
+    {
+      id: 5,
+      title: 'Urban Dental Co.',
+      description: 'Bold contemporary design with live chat, virtual consultations via Zoom API, and same-day emergency booking.',
+      tags: ['booking'],
+      tech: ['Vue.js', 'Tailwind', 'Cloudflare Pages'],
+      liveUrl: 'https://urban-dental.pages.dev',  // ← REPLACE
+      codeUrl: 'https://github.com/ASTRUX5/urban-dental',
+      featured: false,
+    },
+    {
+      id: 6,
+      title: 'Zen Dental Studio',
+      description: 'Spa-like experience with GSAP animations, sedation dentistry booking, and meditation audio integration.',
+      tags: ['luxury', 'booking'],
+      tech: ['Astro', 'GSAP', 'Cloudflare Pages'],
+      liveUrl: 'https://zen-dental.pages.dev',  // ← REPLACE
+      codeUrl: 'https://github.com/ASTRUX5/zen-dental',
+      featured: true,
+    },
+    // ← ADD MORE OF YOUR DENTAL SITES HERE
+  ];
+
+  // ═══════════════════════════════════════════════════════════
+  // RENDER PROJECTS
+  // ═══════════════════════════════════════════════════════════
+
+  const grid = document.getElementById('projectGrid');
+  const pills = document.querySelectorAll('.pill');
+
+  function renderProjects(filter = 'all') {
+    const filtered = filter === 'all' 
+      ? projects 
+      : projects.filter(p => p.tags.includes(filter));
+
+    grid.innerHTML = filtered.map(p => `
+      <article class="project-card" data-tags="${p.tags.join(' ')}">
+        <div class="project-preview" onclick="window.open('${p.liveUrl}', '_blank')">
+          <iframe src="${p.liveUrl}" loading="lazy" title="${p.title} preview"></iframe>
+          <div class="preview-overlay">
+            <a href="${p.liveUrl}" target="_blank" rel="noopener" class="preview-btn btn-live" onclick="event.stopPropagation()">
+              <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              View Live Site
+            </a>
+            <a href="${p.codeUrl}" target="_blank" rel="noopener" class="preview-btn btn-code" onclick="event.stopPropagation()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+              View Source Code
+            </a>
+          </div>
+        </div>
+        <div class="project-info">
+          <h3 class="project-title">${p.title}</h3>
+          <p class="project-desc">${p.description}</p>
+          <div class="tech-badges">
+            ${p.tech.map(t => {
+              if (t === 'Cloudflare Pages') return `<span class="badge badge-cf">${t}</span>`;
+              return `<span class="badge badge-primary">${t}</span>`;
+            }).join('')}
+            ${p.tags.map(t => `<span class="badge badge-secondary">${t}</span>`).join('')}
+          </div>
+          <div class="project-meta">
+            <div class="meta-item">
+              <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14" fill="none" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              <100ms load
+            </div>
+            <div class="meta-item">
+              <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+              Edge Cached
+            </div>
+          </div>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // FILTER LOGIC
+  // ═══════════════════════════════════════════════════════════
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const filter = pill.dataset.filter;
+      renderProjects(filter);
+    });
+  });
+
+  // Initial render
+  renderProjects();
+</script>
+
+</body>
+</html>
