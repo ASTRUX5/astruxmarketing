@@ -4,43 +4,39 @@
 
   // Configuration - Edit these values as needed
   const CONFIG = {
-    // Cloudflare Pages Function endpoint (same domain, no separate worker needed!)
-    workerUrl: '/api/chat', // This calls the function in /functions/api/chat.js
+    // Cloudflare Pages Function endpoint
+    workerUrl: '/api/chat',
 
     // Chat UI Settings
     botName: 'Astrux Assistant',
-    botAvatar: '🚀',
-    userAvatar: '👤',
+    botAvatar: 'fa-solid fa-robot',
+    userAvatar: 'fa-solid fa-user',
     placeholder: 'Ask about our services...',
-    welcomeMessage: 'Hi! I\'m here to help you learn about Astrux Marketing. Ask me about our free demos, pricing, or how we can build your website!',
+    welcomeMessage: "Hello. I'm here to help with questions about Astrux Marketing, our services, or requesting a free demo.",
 
-    // System Prompt - Customize bot behavior here
-    systemPrompt: `You are a helpful assistant for Astrux Marketing, a web design agency specializing in custom websites for small businesses.
+    // System Prompt - Professional, concise, no emojis
+    systemPrompt: `You are a professional assistant for Astrux Marketing, a web design agency. Be concise and direct.
 
-KEY INFORMATION ABOUT ASTRUX:
-- We build custom websites with a "free demo first" model - clients see a live preview before paying anything
-- Average delivery time: 48 hours for demos
-- Industries served: Dental clinics, healthcare, gyms, restaurants, salons, retail, education, e-commerce
-- Hosting: Cloudflare Pages (fast, reliable, global CDN)
-- Pricing tiers: Starter (up to 3 pages), Standard (up to 6 pages, most popular), Premium (unlimited pages, PWA)
-- Key features: Mobile-first design, SEO ready, WhatsApp integration, appointment booking forms, Google Maps
-- Support: WhatsApp, Telegram, Email - real human support, not bots
-- Guarantee: 100% risk-free, no upfront payment, free revisions until satisfied
+KEY FACTS:
+- Free demo first, pay only if satisfied
+- 48 hour average delivery
+- Industries: Dental, medical, gyms, restaurants, salons, retail, education
+- Hosting: Cloudflare Pages
+- Plans: Starter (3 pages), Standard (6 pages), Premium (unlimited)
+- Features: Mobile-first, SEO, WhatsApp integration, booking forms
+- Support: WhatsApp +91 6006555193, Telegram, email
 
-YOUR ROLE:
-- Answer questions about our services, process, pricing, and capabilities
-- Encourage visitors to request a free demo
-- Be friendly, professional, and concise
-- If asked about specific pricing numbers, explain that we offer custom quotes based on requirements, but emphasize the free demo means zero risk
-- For technical questions, mention our stack: HTML5, CSS3, JavaScript, Tailwind CSS, Cloudflare
-- Always steer conversations toward requesting a free demo via the form or WhatsApp
-- If you don\'t know something, suggest contacting us directly on WhatsApp at +91 6006555193
+RULES:
+- Keep replies under 3 sentences
+- No emojis
+- No exclamation marks
+- Professional, helpful tone
+- Direct users to demo form or WhatsApp for complex questions
+- If unsure, say "Let me connect you with our team on WhatsApp: +91 6006555193"`,
 
-TONE: Professional but approachable, enthusiastic about helping small businesses succeed online.`,
-
-    // Pre-messages (conversation context)
+    // Pre-messages
     preMessages: [
-      { role: 'system', content: null } // Will be populated with systemPrompt
+      { role: 'system', content: null }
     ]
   };
 
@@ -58,10 +54,7 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
     createDOM();
     attachEvents();
 
-    // Set system prompt
     CONFIG.preMessages[0].content = CONFIG.systemPrompt;
-
-    // Add welcome message
     addMessage('bot', CONFIG.welcomeMessage);
   }
 
@@ -69,7 +62,6 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
   function createStyles() {
     const styles = document.createElement('style');
     styles.textContent = `
-      /* Astrux Chatbot Styles */
       #astrux-chat-container {
         position: fixed;
         bottom: 90px;
@@ -92,6 +84,7 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
         box-shadow: 0 6px 28px rgba(221, 46, 24, 0.38);
         transition: transform 0.3s, box-shadow 0.3s;
         position: relative;
+        color: #000;
       }
 
       #astrux-chat-toggle:hover {
@@ -157,7 +150,8 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.3rem;
+        font-size: 1.1rem;
+        color: #000;
       }
 
       #astrux-chat-header .info {
@@ -253,17 +247,19 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1rem;
+        font-size: 0.9rem;
         flex-shrink: 0;
       }
 
       .astrux-message.bot .avatar {
         background: linear-gradient(135deg, #FFAB00, #DD2E18);
+        color: #000;
       }
 
       .astrux-message.user .avatar {
         background: #141416;
         border: 1px solid rgba(255, 171, 0, 0.2);
+        color: var(--text);
       }
 
       .astrux-message .bubble {
@@ -365,11 +361,6 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
         cursor: not-allowed;
       }
 
-      .astrux-error {
-        background: rgba(221, 46, 24, 0.1) !important;
-        border-color: rgba(221, 46, 24, 0.3) !important;
-      }
-
       @media (max-width: 480px) {
         #astrux-chat-window {
           width: calc(100vw - 40px);
@@ -388,17 +379,17 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
 
     chatToggle = document.createElement('button');
     chatToggle.id = 'astrux-chat-toggle';
-    chatToggle.innerHTML = '<div class="pulse"></div><span>💬</span>';
+    chatToggle.innerHTML = '<div class="pulse"></div><i class="fa-solid fa-comment-dots"></i>';
     chatToggle.setAttribute('aria-label', 'Open chat');
 
     chatWindow = document.createElement('div');
     chatWindow.id = 'astrux-chat-window';
     chatWindow.innerHTML = `
       <div id="astrux-chat-header">
-        <div class="avatar">${CONFIG.botAvatar}</div>
+        <div class="avatar"><i class="${CONFIG.botAvatar}"></i></div>
         <div class="info">
           <div class="name">${CONFIG.botName}</div>
-          <div class="status"><span class="status-dot"></span>Online now</div>
+          <div class="status"><span class="status-dot"></span>Online</div>
         </div>
         <button id="astrux-chat-close" aria-label="Close chat"><i class="fa-solid fa-xmark"></i></button>
       </div>
@@ -430,7 +421,6 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
       }
     });
 
-    // Close on outside click
     document.addEventListener('click', (e) => {
       if (isOpen && !chatContainer.contains(e.target)) {
         toggleChat();
@@ -442,7 +432,8 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
   function toggleChat() {
     isOpen = !isOpen;
     chatWindow.classList.toggle('open', isOpen);
-    chatToggle.querySelector('span').textContent = isOpen ? '✕' : '💬';
+    const icon = chatToggle.querySelector('i');
+    icon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-comment-dots';
     chatToggle.setAttribute('aria-label', isOpen ? 'Close chat' : 'Open chat');
 
     if (isOpen) {
@@ -456,7 +447,7 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
     const messageDiv = document.createElement('div');
     messageDiv.className = `astrux-message ${role}`;
     messageDiv.innerHTML = `
-      <div class="avatar">${role === 'bot' ? CONFIG.botAvatar : CONFIG.userAvatar}</div>
+      <div class="avatar"><i class="${role === 'bot' ? CONFIG.botAvatar : CONFIG.userAvatar}"></i></div>
       <div class="bubble">${escapeHtml(content)}</div>
     `;
     messagesContainer.appendChild(messageDiv);
@@ -471,7 +462,7 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
     typingDiv.id = 'astrux-typing-indicator';
     typingDiv.className = 'astrux-message bot';
     typingDiv.innerHTML = `
-      <div class="avatar">${CONFIG.botAvatar}</div>
+      <div class="avatar"><i class="${CONFIG.botAvatar}"></i></div>
       <div class="bubble astrux-typing">
         <span></span><span></span><span></span>
       </div>
@@ -503,45 +494,37 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
     const content = inputField.value.trim();
     if (!content || isTyping) return;
 
-    // Add user message
     addMessage('user', content);
     inputField.value = '';
 
-    // Show typing
     isTyping = true;
     sendBtn.disabled = true;
     showTyping();
 
     try {
-      // Prepare messages for API
       const apiMessages = [
         ...CONFIG.preMessages,
         ...messages.slice(1).map(m => ({ role: m.role === 'bot' ? 'assistant' : 'user', content: m.content }))
       ];
 
-      // Call Pages Function
       const response = await fetch(CONFIG.workerUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: apiMessages })
       });
 
       if (!response.ok) throw new Error('API error');
 
-      // Hide typing and create response bubble
       hideTyping();
       const responseDiv = document.createElement('div');
       responseDiv.className = 'astrux-message bot';
       responseDiv.innerHTML = `
-        <div class="avatar">${CONFIG.botAvatar}</div>
+        <div class="avatar"><i class="${CONFIG.botAvatar}"></i></div>
         <div class="bubble"></div>
       `;
       messagesContainer.appendChild(responseDiv);
       const bubble = responseDiv.querySelector('.bubble');
 
-      // Stream response
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let fullResponse = '';
@@ -564,9 +547,7 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
                 bubble.textContent = fullResponse;
                 scrollToBottom();
               }
-            } catch (e) {
-              // Ignore parse errors
-            }
+            } catch (e) {}
           }
         }
       }
@@ -575,8 +556,7 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
 
     } catch (error) {
       hideTyping();
-      addMessage('bot', 'Sorry, I\'m having trouble connecting right now. Please try again or reach us on WhatsApp at +91 6006555193.');
-      console.error('Chat error:', error);
+      addMessage('bot', 'Connection issue. Please contact us on WhatsApp: +91 6006555193');
     } finally {
       isTyping = false;
       sendBtn.disabled = false;
@@ -584,7 +564,6 @@ TONE: Professional but approachable, enthusiastic about helping small businesses
     }
   }
 
-  // Initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
