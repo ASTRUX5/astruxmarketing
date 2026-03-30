@@ -107,7 +107,7 @@ nav.scrolled{padding:13px 5%}
 /* ─── HERO ─── */
 #hero{
   min-height:100vh;display:flex;flex-direction:column;justify-content:center;
-  padding:150px 5% 110px;position:relative;overflow:hidden;
+  padding:130px 5% 80px;position:relative;overflow:hidden;
 }
 .orb{position:absolute;border-radius:50%;filter:blur(160px);pointer-events:none;will-change:transform}
 .orb1{width:700px;height:700px;background:rgba(221,46,24,.09);top:-200px;right:-120px;animation:fl1 11s ease-in-out infinite}
@@ -123,7 +123,7 @@ nav.scrolled{padding:13px 5%}
   border-radius:100px;padding:8px 18px;
   font-family:'Space Mono',monospace;font-size:.6rem;
   letter-spacing:.22em;color:var(--orange);text-transform:uppercase;
-  margin-bottom:32px;opacity:0;animation:fadeUp .8s .2s forwards;
+  margin-bottom:28px;opacity:0;animation:fadeUp .8s .2s forwards;
 }
 .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:blink 1.6s ease-in-out infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
@@ -149,48 +149,21 @@ h1 .outline{
 }
 h1 .outline::before,h1 .outline::after{
   content:'Convert.';
-  position:absolute;
-  left:0;top:0;
-  font-family:'Space Mono',monospace;
-  font-weight:700;
-  letter-spacing:.08em;
+  position:absolute;left:0;top:0;
+  font-family:'Space Mono',monospace;font-weight:700;letter-spacing:.08em;
 }
-h1 .outline::before{
-  color:#DD2E18;
-  animation:glitchTop 3s infinite;
-  clip-path:polygon(0 0,100% 0,100% 40%,0 40%);
-}
-h1 .outline::after{
-  color:#00c6ff;
-  animation:glitchBot 3s infinite;
-  clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%);
-}
-@keyframes glitch{
-  0%,90%,100%{transform:translate(0)}
-  92%{transform:translate(-3px,1px)}
-  94%{transform:translate(3px,-1px)}
-  96%{transform:translate(-2px,2px)}
-  98%{transform:translate(2px,-2px)}
-}
-@keyframes glitchTop{
-  0%,90%,100%{transform:translate(0);opacity:0}
-  92%{transform:translate(4px,0);opacity:1}
-  94%{transform:translate(-4px,0);opacity:1}
-  96%{transform:translate(3px,0);opacity:0}
-}
-@keyframes glitchBot{
-  0%,90%,100%{transform:translate(0);opacity:0}
-  93%{transform:translate(-4px,0);opacity:1}
-  95%{transform:translate(4px,0);opacity:1}
-  97%{transform:translate(-2px,0);opacity:0}
-}
+h1 .outline::before{color:#DD2E18;animation:glitchTop 3s infinite;clip-path:polygon(0 0,100% 0,100% 40%,0 40%)}
+h1 .outline::after{color:#00c6ff;animation:glitchBot 3s infinite;clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%)}
+@keyframes glitch{0%,90%,100%{transform:translate(0)}92%{transform:translate(-3px,1px)}94%{transform:translate(3px,-1px)}96%{transform:translate(-2px,2px)}98%{transform:translate(2px,-2px)}}
+@keyframes glitchTop{0%,90%,100%{transform:translate(0);opacity:0}92%{transform:translate(4px,0);opacity:1}94%{transform:translate(-4px,0);opacity:1}96%{transform:translate(3px,0);opacity:0}}
+@keyframes glitchBot{0%,90%,100%{transform:translate(0);opacity:0}93%{transform:translate(-4px,0);opacity:1}95%{transform:translate(4px,0);opacity:1}97%{transform:translate(-2px,0);opacity:0}}
 
 .hero-sub{
-  font-size:1.02rem;color:var(--muted);max-width:460px;line-height:1.86;
-  margin-top:28px;font-weight:300;opacity:0;animation:fadeUp .9s .6s forwards;
+  font-size:.98rem;color:var(--muted);max-width:420px;line-height:1.78;
+  margin-top:22px;font-weight:300;opacity:0;animation:fadeUp .9s .6s forwards;
 }
 .hero-btns{
-  display:flex;gap:14px;margin-top:44px;flex-wrap:wrap;
+  display:flex;gap:12px;margin-top:32px;flex-wrap:wrap;
   opacity:0;animation:fadeUp .9s .8s forwards;
 }
 .btn-primary{
@@ -209,19 +182,29 @@ h1 .outline::after{
 }
 .btn-ghost:hover{border-color:var(--orange);color:var(--orange);background:rgba(255,171,0,.04)}
 
+/* glassmorphism stats bar */
 .hero-stats{
-  display:flex;gap:48px;margin-top:72px;padding-top:44px;
-  border-top:1px solid var(--border);
-  opacity:0;animation:fadeUp .9s 1s forwards;flex-wrap:wrap;
+  display:inline-flex;gap:0;margin-top:44px;
+  opacity:0;animation:fadeUp .9s 1s forwards;
+  background:rgba(255,255,255,.03);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,171,0,.14);
+  border-radius:18px;overflow:hidden;
+  flex-wrap:wrap;
 }
+.hero-stat-item{
+  padding:20px 32px;display:flex;flex-direction:column;align-items:center;
+  border-right:1px solid rgba(255,171,0,.1);position:relative;
+}
+.hero-stat-item:last-child{border-right:none}
 .stat-num{
-  font-family:'Outfit',sans-serif;font-size:2.3rem;font-weight:900;
+  font-family:'Outfit',sans-serif;font-size:1.9rem;font-weight:900;
   background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;
 }
-.stat-label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-top:8px}
+.stat-label{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-top:6px;white-space:nowrap}
 
 .hero-scroll{
-  position:absolute;bottom:36px;left:5%;
+  position:absolute;bottom:30px;left:5%;
   display:flex;align-items:center;gap:12px;color:var(--muted);
   font-family:'Space Mono',monospace;font-size:.56rem;letter-spacing:.24em;text-transform:uppercase;
   animation:fadeUp 1s 1.4s both;
@@ -230,23 +213,19 @@ h1 .outline::after{
 @keyframes sPulse{0%,100%{opacity:.2}50%{opacity:1}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 
-/* ─── TRUST BAR ─── */
-.trust-bar{
-  padding:18px 5%;
-  background:var(--darker);
-  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:32px;flex-wrap:wrap;justify-content:center;
+@media(max-width:600px){
+  .hero-stats{width:100%}
+  .hero-stat-item{flex:1;padding:16px 12px;border-right:1px solid rgba(255,171,0,.1)}
+  .hero-stat-item:nth-child(2n){border-right:none}
+  .hero-stat-item:nth-child(n+3){border-top:1px solid rgba(255,171,0,.1)}
 }
-.trust-item{
-  display:flex;align-items:center;gap:9px;
-  font-family:'Space Mono',monospace;font-size:.58rem;
-  color:rgba(255,171,0,.4);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;
-}
-.trust-item i{color:var(--orange);font-size:.7rem}
+
+/* ─── TRUST BAR ─── (hidden, merged into marquee) ─── */
+.trust-bar{display:none}
 
 /* ─── MARQUEE ─── */
 .marquee-section{
-  overflow:hidden;border-bottom:1px solid var(--border);background:var(--darker);
+  overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--darker);
 }
 .marquee-track{display:flex;width:max-content;animation:mq 28s linear infinite;padding:15px 0}
 .marquee-section:hover .marquee-track{animation-play-state:paused}
@@ -282,31 +261,49 @@ h2 .accent{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill
 .divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,171,0,.14),transparent)}
 
 /* ─── PROCESS ─── */
-#process{background:var(--darker)}
-.process-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  margin-top:60px;border:1px solid var(--border);border-radius:20px;overflow:hidden;
+#process{background:var(--darker);padding:80px 5%}
+.process-timeline{
+  display:flex;align-items:flex-start;gap:0;
+  margin-top:52px;position:relative;
 }
-.process-step{
-  padding:42px 30px;background:var(--card);position:relative;
-  border-right:1px solid var(--border);transition:background .3s;overflow:hidden;
+.process-timeline::before{
+  content:'';position:absolute;top:28px;left:calc(12.5% + 0px);
+  right:calc(12.5% + 0px);height:1px;
+  background:linear-gradient(to right,var(--orange),rgba(255,171,0,.2),var(--orange));
+  z-index:0;
 }
-.process-step:last-child{border-right:none}
-.process-step::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:var(--grad);transform:scaleX(0);transform-origin:left;transition:transform .45s;
+.pt-step{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  text-align:center;padding:0 16px;position:relative;z-index:1;
 }
-.process-step:hover::after{transform:scaleX(1)}
-.process-step:hover{background:#0e0e10}
-.step-num{font-family:'Space Mono',monospace;font-size:.56rem;color:var(--orange);letter-spacing:.24em;margin-bottom:22px;opacity:.5}
-.step-icon{
-  width:50px;height:50px;border-radius:14px;background:rgba(255,171,0,.06);
-  display:flex;align-items:center;justify-content:center;font-size:1.15rem;color:var(--orange);
-  margin-bottom:20px;transition:transform .3s,background .3s;
+.pt-dot{
+  width:56px;height:56px;border-radius:50%;
+  background:rgba(255,255,255,.04);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,171,0,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;color:var(--orange);margin-bottom:20px;
+  transition:background .3s,border-color .3s,transform .3s;
+  box-shadow:0 4px 20px rgba(255,171,0,.08);
 }
-.process-step:hover .step-icon{transform:scale(1.1) rotate(6deg);background:rgba(255,171,0,.12)}
-.step-title{font-family:'Outfit',sans-serif;font-weight:700;font-size:.96rem;margin-bottom:11px;line-height:1.35}
-.step-desc{color:var(--muted);font-size:.81rem;line-height:1.85}
+.pt-step:hover .pt-dot{
+  background:rgba(255,171,0,.1);border-color:var(--orange);
+  transform:scale(1.1);box-shadow:0 6px 28px rgba(255,171,0,.18);
+}
+.pt-num{
+  font-family:'Space Mono',monospace;font-size:.52rem;
+  color:var(--orange);letter-spacing:.2em;margin-bottom:8px;opacity:.55;
+}
+.pt-title{font-family:'Outfit',sans-serif;font-weight:700;font-size:.88rem;margin-bottom:6px;line-height:1.3}
+.pt-desc{color:var(--muted);font-size:.76rem;line-height:1.72;max-width:160px;margin:0 auto}
+
+@media(max-width:768px){
+  .process-timeline{flex-direction:column;gap:32px}
+  .process-timeline::before{display:none}
+  .pt-step{flex-direction:row;text-align:left;align-items:flex-start;gap:18px}
+  .pt-dot{flex-shrink:0;margin-bottom:0}
+  .pt-desc{max-width:none;margin:0}
+}
 
 /* ─── SHOWCASE STRIPS ─── */
 #showcase{overflow:hidden;padding-bottom:90px}
@@ -791,6 +788,126 @@ footer{
   .number-val{font-size:1.9rem}
   .number-label{font-size:.62rem;letter-spacing:.06em}
 }
+/* ─── AI CHAT WIDGET ─── */
+#ai-chat-widget{position:fixed;bottom:96px;right:26px;z-index:4999;width:360px}
+@media(max-width:480px){#ai-chat-widget{width:calc(100vw - 32px);right:16px;bottom:88px}}
+
+.ai-chat-panel{
+  background:rgba(14,14,16,.82);
+  backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+  border:1px solid rgba(255,171,0,.18);
+  border-radius:20px;overflow:hidden;
+  box-shadow:0 24px 60px rgba(0,0,0,.7);
+  opacity:0;pointer-events:none;
+  transform:translateY(12px) scale(.97);
+  transform-origin:bottom right;
+  transition:opacity .3s,transform .3s;
+  display:flex;flex-direction:column;height:480px;
+}
+.ai-chat-panel.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1)}
+
+.ai-chat-header{
+  padding:14px 18px;
+  border-bottom:1px solid rgba(255,171,0,.1);
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,171,0,.04);flex-shrink:0;
+}
+.ai-chat-header-left{display:flex;align-items:center;gap:10px}
+.ai-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--grad);display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;color:#000;font-weight:900;font-family:'Outfit',sans-serif;
+}
+.ai-name{font-family:'Outfit',sans-serif;font-weight:700;font-size:.84rem;color:var(--text)}
+.ai-status{font-size:.65rem;color:#34D399;display:flex;align-items:center;gap:5px;margin-top:1px}
+.ai-status::before{content:'';width:5px;height:5px;border-radius:50%;background:#34D399;animation:blink 1.8s infinite}
+.ai-close-btn{
+  width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.08);
+  background:transparent;color:var(--muted);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:.7rem;
+  transition:background .2s,color .2s;
+}
+.ai-close-btn:hover{background:rgba(221,46,24,.12);color:var(--red)}
+
+.ai-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scrollbar-width:thin;scrollbar-color:rgba(255,171,0,.2) transparent}
+.ai-messages::-webkit-scrollbar{width:3px}
+.ai-messages::-webkit-scrollbar-thumb{background:rgba(255,171,0,.2);border-radius:3px}
+
+.ai-msg{display:flex;gap:9px;align-items:flex-end;max-width:85%}
+.ai-msg.user{align-self:flex-end;flex-direction:row-reverse}
+.ai-msg-avatar{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:900;
+  font-family:'Outfit',sans-serif;color:#000;
+}
+.ai-msg.bot .ai-msg-avatar{background:var(--grad)}
+.ai-msg.user .ai-msg-avatar{background:rgba(255,255,255,.1);color:var(--muted)}
+.ai-msg-bubble{
+  padding:10px 14px;border-radius:14px;font-size:.8rem;line-height:1.65;
+}
+.ai-msg.bot .ai-msg-bubble{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,171,0,.1);color:var(--text);
+  border-bottom-left-radius:4px;
+}
+.ai-msg.user .ai-msg-bubble{
+  background:rgba(255,171,0,.1);border:1px solid rgba(255,171,0,.2);color:var(--text);
+  border-bottom-right-radius:4px;
+}
+.ai-typing{display:flex;gap:4px;align-items:center;padding:10px 14px}
+.ai-typing span{width:5px;height:5px;border-radius:50%;background:var(--orange);opacity:.4;animation:typingDot 1.2s infinite}
+.ai-typing span:nth-child(2){animation-delay:.2s}
+.ai-typing span:nth-child(3){animation-delay:.4s}
+@keyframes typingDot{0%,60%,100%{opacity:.4;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+
+.ai-input-area{
+  padding:12px 14px;border-top:1px solid rgba(255,171,0,.1);
+  display:flex;gap:8px;align-items:center;flex-shrink:0;
+  background:rgba(0,0,0,.2);
+}
+.ai-input{
+  flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,171,0,.12);
+  border-radius:100px;padding:9px 16px;color:var(--text);
+  font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none;
+  transition:border-color .2s;
+}
+.ai-input:focus{border-color:rgba(255,171,0,.35)}
+.ai-input::placeholder{color:var(--muted)}
+.ai-send{
+  width:36px;height:36px;border-radius:50%;background:var(--grad);
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:#000;font-size:.75rem;transition:transform .2s,opacity .2s;flex-shrink:0;
+}
+.ai-send:hover{transform:scale(1.08)}
+.ai-send:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+.ai-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 12px}
+.ai-suggestion{
+  padding:5px 12px;border-radius:100px;border:1px solid rgba(255,171,0,.15);
+  font-size:.7rem;color:rgba(255,171,0,.7);cursor:pointer;background:transparent;
+  font-family:'DM Sans',sans-serif;transition:background .2s,color .2s,border-color .2s;
+  white-space:nowrap;
+}
+.ai-suggestion:hover{background:rgba(255,171,0,.08);color:var(--orange);border-color:var(--orange)}
+
+.ai-toggle{
+  position:fixed;bottom:26px;right:90px;z-index:5001;
+  width:52px;height:52px;border-radius:50%;
+  background:rgba(14,14,16,.9);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,171,0,.25);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:1.1rem;color:var(--orange);
+  transition:transform .3s,box-shadow .3s,border-color .3s;
+  box-shadow:0 4px 20px rgba(255,171,0,.12);
+}
+.ai-toggle:hover{transform:scale(1.06);box-shadow:0 6px 28px rgba(255,171,0,.22);border-color:var(--orange)}
+.ai-toggle-badge{
+  position:absolute;top:-2px;right:-2px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--grad);font-size:.48rem;color:#000;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Outfit',sans-serif;
+}
 /* ─── PERFORMANCE ─── */
 .project-card{contain:layout style paint}
 .testi-card{contain:layout style paint}
@@ -838,21 +955,21 @@ section{content-visibility:auto;contain-intrinsic-size:0 600px}
   <div class="orb orb2"></div>
   <div class="orb orb3"></div>
   <div class="hero-inner">
-    <div class="hero-badge"><div class="badge-dot"></div>Digital Presence Architects</div>
+    <div class="hero-badge"><div class="badge-dot"></div>Based in Kashmir. Building for everyone.</div>
     <h1>We Build Sites<br>That <span class="water">Actually</span><br><span class="outline">Convert.</span></h1>
-    <p class="hero-sub">From clinics to gyms, restaurants to startups — we craft pixel-perfect, lightning-fast websites that make your business impossible to ignore.</p>
+    <p class="hero-sub">Your business deserves to be found online. We build fast, good-looking websites that bring in real customers.</p>
     <div class="hero-btns">
       <a href="#showcase" class="btn-primary"><i class="fa-solid fa-eye"></i>See Our Work</a>
-      <a href="#" class="btn-ghost" onclick="openModal(event)"><i class="fa-regular fa-paper-plane"></i>Request a Demo</a>
+      <a href="#" class="btn-ghost" onclick="openModal(event)"><i class="fa-regular fa-paper-plane"></i>Get a Free Demo</a>
     </div>
     <div class="hero-stats">
-      <div><div class="stat-num">40+</div><div class="stat-label">Sites Delivered</div></div>
-      <div><div class="stat-num">100%</div><div class="stat-label">Client Satisfaction</div></div>
-      <div><div class="stat-num">48h</div><div class="stat-label">Avg. Turnaround</div></div>
-      <div><div class="stat-num">₹0</div><div class="stat-label">Upfront Cost</div></div>
+      <div class="hero-stat-item"><div class="stat-num">40+</div><div class="stat-label">Sites Built</div></div>
+      <div class="hero-stat-item"><div class="stat-num">100%</div><div class="stat-label">Satisfaction</div></div>
+      <div class="hero-stat-item"><div class="stat-num">48h</div><div class="stat-label">Turnaround</div></div>
+      <div class="hero-stat-item"><div class="stat-num">₹0</div><div class="stat-label">Upfront Cost</div></div>
     </div>
   </div>
-  <div class="hero-scroll"><div class="scroll-line"></div><span>Scroll to explore</span></div>
+  <div class="hero-scroll"><div class="scroll-line"></div><span>Scroll</span></div>
 </section>
 
 <!-- TRUST BAR -->
@@ -889,32 +1006,32 @@ section{content-visibility:auto;contain-intrinsic-size:0 600px}
 
 <!-- PROCESS -->
 <section id="process">
-  <div class="section-label">How We Work</div>
-  <h2 class="reveal">Simple Process,<br><span class="accent">Exceptional Results</span></h2>
-  <div class="process-grid reveal reveal-d1">
-    <div class="process-step">
-      <div class="step-num">01</div>
-      <div class="step-icon"><i class="fa-regular fa-comments"></i></div>
-      <div class="step-title">Tell Us Your Vision</div>
-      <div class="step-desc">A quick chat or form. Tell us your industry, who you serve, what vibe you want. Takes 2 minutes.</div>
+  <div class="section-label">How It Works</div>
+  <h2 class="reveal">Four Steps to <span class="accent">Going Live</span></h2>
+  <div class="process-timeline reveal reveal-d1">
+    <div class="pt-step">
+      <div class="pt-dot"><i class="fa-regular fa-comments"></i></div>
+      <div class="pt-num">01</div>
+      <div class="pt-title">Tell us what you need</div>
+      <div class="pt-desc">Two minutes. Your industry, your vibe, what you want.</div>
     </div>
-    <div class="process-step">
-      <div class="step-num">02</div>
-      <div class="step-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
-      <div class="step-title">We Build Your Demo</div>
-      <div class="step-desc">A fully working live demo built for your specific business. Not a template — built from scratch for you.</div>
+    <div class="pt-step">
+      <div class="pt-dot"><i class="fa-solid fa-bolt-lightning"></i></div>
+      <div class="pt-num">02</div>
+      <div class="pt-title">We build your demo</div>
+      <div class="pt-desc">A real working site built for your business. Not a template.</div>
     </div>
-    <div class="process-step">
-      <div class="step-num">03</div>
-      <div class="step-icon"><i class="fa-solid fa-sliders"></i></div>
-      <div class="step-title">You Review & Refine</div>
-      <div class="step-desc">See it live. Request changes. Colors, sections, features — we iterate until it's exactly right. Zero extra cost.</div>
+    <div class="pt-step">
+      <div class="pt-dot"><i class="fa-solid fa-sliders"></i></div>
+      <div class="pt-num">03</div>
+      <div class="pt-title">You say what to change</div>
+      <div class="pt-desc">Colors, sections, wording. We fix everything until it's right.</div>
     </div>
-    <div class="process-step">
-      <div class="step-num">04</div>
-      <div class="step-icon"><i class="fa-solid fa-rocket"></i></div>
-      <div class="step-title">We Launch. You Win.</div>
-      <div class="step-desc">Your site goes live on Cloudflare's global edge network. Blazing fast, SEO-ready, built to convert.</div>
+    <div class="pt-step">
+      <div class="pt-dot"><i class="fa-solid fa-rocket"></i></div>
+      <div class="pt-num">04</div>
+      <div class="pt-title">We go live</div>
+      <div class="pt-desc">On Cloudflare's global network. Fast everywhere. SEO ready.</div>
     </div>
   </div>
 </section>
@@ -1428,7 +1545,6 @@ const projects=[
   {title:'Hi-Tech Dental O',   tag:'Dental',    url:'https://hi-tech-dental-clinic-o.pages.dev'},
   {title:'Chunk City Ganderbal', tag:'Restaurant', url:'https://chunk-city-ganderbal-new.pages.dev/'},
   {title:'Chinar Communications', tag:'Phone Shop', url:'https://chinarcommunications.pages.dev'},
-  {title:'Srinagar Tourism', tag:'Travel agency', url:'https://srinagartourism.pages.dev'},
 ];
 
 function cardHTML(p){
@@ -1660,6 +1776,139 @@ async function handleSubmit(){
   btn.disabled=false;
   btn.innerHTML='<i class="fa-regular fa-paper-plane"></i> Send My Request';
 }
+
+/* ─── AI CHAT WIDGET ─── */
+const NVIDIA_API_KEY='YOUR_NVIDIA_API_KEY_HERE';
+const SYSTEM_PROMPT=`You are the Astrux Marketing assistant. Astrux Marketing is a web design agency based in Kashmir that builds custom websites for businesses. Key facts: Free live demo before any payment. Sites delivered in 48 hours. 100% custom built, no templates. Hosted on Cloudflare Pages, very fast. Services include dental clinics, restaurants, gyms, salons, e-commerce, corporate sites, healthcare. Contact: WhatsApp +91 91361 65601, Telegram @wvzse, Email astruxmarketing@outlook.com. Three plans: Starter (up to 3 pages), Standard (up to 6 pages, most popular), Premium (unlimited pages, PWA). Keep answers short, friendly, and human. No bullet lists unless really needed. No em dashes.`;
+let aiOpen=false,aiLoading=false;
+const aiHistory=[];
+
+function toggleAiChat(){
+  aiOpen=!aiOpen;
+  document.getElementById('aiPanel').classList.toggle('open',aiOpen);
+  document.getElementById('aiToggleIcon').className=aiOpen?'fa-solid fa-xmark':'fa-solid fa-microchip';
+  if(aiOpen) setTimeout(()=>document.getElementById('aiInput').focus(),300);
+}
+
+function sendSuggestion(btn){
+  const text=btn.textContent;
+  document.getElementById('aiSuggestions').style.display='none';
+  appendAiMessage('user',text);
+  callNvidiaAPI(text);
+}
+
+function sendMessage(){
+  const input=document.getElementById('aiInput');
+  const text=input.value.trim();
+  if(!text||aiLoading)return;
+  input.value='';
+  document.getElementById('aiSuggestions').style.display='none';
+  appendAiMessage('user',text);
+  callNvidiaAPI(text);
+}
+
+function appendAiMessage(role,text){
+  const box=document.getElementById('aiMessages');
+  const div=document.createElement('div');
+  div.className=`ai-msg ${role}`;
+  const avatarHTML=role==='bot'?'A':'<i class="fa-solid fa-user" style="font-size:.55rem"></i>';
+  div.innerHTML=`<div class="ai-msg-avatar">${avatarHTML}</div><div class="ai-msg-bubble"></div>`;
+  div.querySelector('.ai-msg-bubble').textContent=text;
+  box.appendChild(div);
+  box.scrollTop=box.scrollHeight;
+  return div;
+}
+
+function showTyping(){
+  const box=document.getElementById('aiMessages');
+  const div=document.createElement('div');
+  div.className='ai-msg bot';div.id='aiTyping';
+  div.innerHTML=`<div class="ai-msg-avatar">A</div><div class="ai-typing"><span></span><span></span><span></span></div>`;
+  box.appendChild(div);box.scrollTop=box.scrollHeight;
+}
+function removeTyping(){const t=document.getElementById('aiTyping');if(t)t.remove();}
+
+async function callNvidiaAPI(userMsg){
+  if(aiLoading)return;
+  aiLoading=true;
+  document.getElementById('aiSend').disabled=true;
+  showTyping();
+  aiHistory.push({role:'user',content:userMsg});
+  try{
+    const resp=await fetch('https://integrate.api.nvidia.com/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${NVIDIA_API_KEY}`},
+      body:JSON.stringify({
+        model:'qwen/qwq-32b',
+        messages:[{role:'system',content:SYSTEM_PROMPT},...aiHistory.slice(-8)],
+        temperature:0.6,top_p:0.7,max_tokens:512,stream:true
+      })
+    });
+    removeTyping();
+    if(!resp.ok)throw new Error('err');
+    const msgDiv=appendAiMessage('bot','');
+    const bubble=msgDiv.querySelector('.ai-msg-bubble');
+    const box=document.getElementById('aiMessages');
+    let full='';
+    const reader=resp.body.getReader();
+    const decoder=new TextDecoder();
+    while(true){
+      const{done,value}=await reader.read();
+      if(done)break;
+      for(const line of decoder.decode(value).split('\n')){
+        if(!line.startsWith('data:'))continue;
+        const data=line.slice(5).trim();
+        if(data==='[DONE]')break;
+        try{
+          const delta=JSON.parse(data).choices?.[0]?.delta?.content;
+          if(delta){full+=delta;bubble.textContent=full;box.scrollTop=box.scrollHeight;}
+        }catch(e){}
+      }
+    }
+    if(full)aiHistory.push({role:'assistant',content:full});
+  }catch(err){
+    removeTyping();
+    appendAiMessage('bot','Something went wrong. Message us directly on WhatsApp for a faster reply.');
+  }
+  aiLoading=false;
+  document.getElementById('aiSend').disabled=false;
+}
 </script>
+<!-- AI CHAT WIDGET -->
+<button class="ai-toggle" id="aiToggle" onclick="toggleAiChat()" title="Ask Astrux AI">
+  <div class="ai-toggle-badge">AI</div>
+  <i class="fa-solid fa-microchip-ai" id="aiToggleIcon"></i>
+</button>
+
+<div id="ai-chat-widget">
+  <div class="ai-chat-panel" id="aiPanel">
+    <div class="ai-chat-header">
+      <div class="ai-chat-header-left">
+        <div class="ai-avatar">A</div>
+        <div>
+          <div class="ai-name">Astrux Assistant</div>
+          <div class="ai-status">Online now</div>
+        </div>
+      </div>
+      <button class="ai-close-btn" onclick="toggleAiChat()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="ai-messages" id="aiMessages">
+      <div class="ai-msg bot">
+        <div class="ai-msg-avatar">A</div>
+        <div class="ai-msg-bubble">Hey! I can answer questions about our services, pricing, how we work, or anything else. What do you want to know?</div>
+      </div>
+    </div>
+    <div class="ai-suggestions" id="aiSuggestions">
+      <button class="ai-suggestion" onclick="sendSuggestion(this)">How much does it cost?</button>
+      <button class="ai-suggestion" onclick="sendSuggestion(this)">How fast can you build?</button>
+      <button class="ai-suggestion" onclick="sendSuggestion(this)">Do I pay before seeing it?</button>
+    </div>
+    <div class="ai-input-area">
+      <input class="ai-input" id="aiInput" type="text" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sendMessage()">
+      <button class="ai-send" id="aiSend" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>    
