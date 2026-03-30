@@ -1,6 +1,4 @@
 // File: functions/api/chat.js
-// Strips Qwen thinking tags and ensures proper responses
-
 export async function onRequestPost(context) {
   const { env, request } = context;
 
@@ -21,12 +19,12 @@ export async function onRequestPost(context) {
       return new Response('Invalid format', { status: 400, headers: corsHeaders });
     }
 
-    // Modify system message to ensure proper output
-    const modifiedMessages = messages.map(m => {
+    // Add instruction to last user message or system
+    const modifiedMessages = messages.map((m, i) => {
       if (m.role === 'system') {
         return {
-          ...m,
-          content: m.content + "\n\nIMPORTANT: Reply naturally to greetings. Do not say 'Okay' or 'Alright'. Give a proper helpful response."
+          role: 'system',
+          content: m.content + ' Reply naturally without saying Okay or Alright.'
         };
       }
       return m;
@@ -41,8 +39,8 @@ export async function onRequestPost(context) {
       body: JSON.stringify({
         model: 'qwen/qwq-32b',
         messages: modifiedMessages,
-        temperature: 0.7,
-        top_p: 0.9,
+        temperature: 0.6,
+        top_p: 0.7,
         max_tokens: 1024,
         stream: true
       })
@@ -54,7 +52,7 @@ export async function onRequestPost(context) {
       return new Response('AI service error', { status: 502, headers: corsHeaders });
     }
 
-    // Transform stream to strip thinking
+    // Simple passthrough with minimal processing
     const { readable, writable } = new TransformStream({
       transform(chunk, controller) {
         const text = new TextDecoder().decode(chunk);
@@ -62,9 +60,7 @@ export async function onRequestPost(context) {
 
         for (const line of lines) {
           if (!line.startsWith('data: ')) {
-            if (line.trim() === '' || line === 'data: [DONE]') {
-              controller.enqueue(new TextEncoder().encode(line + '\n'));
-            }
+            controller.enqueue(new TextEncoder().encode(line + '\n'));
             continue;
           }
 
@@ -78,16 +74,14 @@ export async function onRequestPost(context) {
             const content = data.choices?.[0]?.delta?.content;
 
             if (content) {
-              // Strip thinking tags and artifacts
-              let clean = content
-                .replace(/<think>[\s\S]*?<\/think>/g, '')
-                .replace(/Okay[.,]?\s*/gi, '')
-                .replace(/Alright[.,]?\s*/gi, '')
-                .trim();
+              // Only strip thinking tags, keep everything else
+              const clean = content.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
 
-              if (clean) {
+              if (clean || content.includes('<think>')) {
                 data.choices[0].delta.content = clean;
                 controller.enqueue(new TextEncoder().encode('data: ' + JSON.stringify(data) + '\n'));
+              } else {
+                controller.enqueue(new TextEncoder().encode(line + '\n'));
               }
             } else {
               controller.enqueue(new TextEncoder().encode(line + '\n'));
