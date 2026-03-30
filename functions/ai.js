@@ -12,8 +12,11 @@ export async function onRequestPost(context) {
   });
 
   return new Response(resp.body, {
+    status: resp.status,
     headers: {
       'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Transfer-Encoding': 'chunked',
       'Access-Control-Allow-Origin': '*'
     }
   });
