@@ -1,4 +1,6 @@
 // File: functions/api/chat.js
+// Uses mistral-small-3.1-24b-instruct-2503 - no thinking, clean responses
+
 export async function onRequestPost(context) {
   const { env, request } = context;
 
@@ -19,17 +21,6 @@ export async function onRequestPost(context) {
       return new Response('Invalid format', { status: 400, headers: corsHeaders });
     }
 
-    // Add instruction to last user message or system
-    const modifiedMessages = messages.map((m, i) => {
-      if (m.role === 'system') {
-        return {
-          role: 'system',
-          content: m.content + ' Reply naturally without saying Okay or Alright.'
-        };
-      }
-      return m;
-    });
-
     const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -37,8 +28,8 @@ export async function onRequestPost(context) {
         'Authorization': `Bearer ${env.NVIDIA_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'qwen/qwq-32b',
-        messages: modifiedMessages,
+        model: 'mistralai/mistral-small-3.1-24b-instruct-2503',
+        messages: messages,
         temperature: 0.6,
         top_p: 0.7,
         max_tokens: 1024,
@@ -52,50 +43,8 @@ export async function onRequestPost(context) {
       return new Response('AI service error', { status: 502, headers: corsHeaders });
     }
 
-    // Simple passthrough with minimal processing
-    const { readable, writable } = new TransformStream({
-      transform(chunk, controller) {
-        const text = new TextDecoder().decode(chunk);
-        const lines = text.split('\n');
-
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) {
-            controller.enqueue(new TextEncoder().encode(line + '\n'));
-            continue;
-          }
-
-          if (line === 'data: [DONE]') {
-            controller.enqueue(new TextEncoder().encode(line + '\n'));
-            continue;
-          }
-
-          try {
-            const data = JSON.parse(line.slice(6));
-            const content = data.choices?.[0]?.delta?.content;
-
-            if (content) {
-              // Only strip thinking tags, keep everything else
-              const clean = content.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
-
-              if (clean || content.includes('<think>')) {
-                data.choices[0].delta.content = clean;
-                controller.enqueue(new TextEncoder().encode('data: ' + JSON.stringify(data) + '\n'));
-              } else {
-                controller.enqueue(new TextEncoder().encode(line + '\n'));
-              }
-            } else {
-              controller.enqueue(new TextEncoder().encode(line + '\n'));
-            }
-          } catch (e) {
-            controller.enqueue(new TextEncoder().encode(line + '\n'));
-          }
-        }
-      }
-    });
-
-    response.body.pipeTo(writable);
-
-    return new Response(readable, {
+    // Simple passthrough - no processing needed for this model
+    return new Response(response.body, {
       headers: {
         ...corsHeaders,
         'Content-Type': 'text/event-stream',
