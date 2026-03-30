@@ -1,64 +1,52 @@
-/* Astrux Chatbot - Cloudflare Pages Functions Integration */
+/* Astrux Chatbot */
 (function() {
   'use strict';
 
-  // Configuration - Edit these values as needed
   const CONFIG = {
-    // Cloudflare Pages Function endpoint
     workerUrl: '/api/chat',
-
-    // Chat UI Settings
     botName: 'Astrux Assistant',
     botAvatar: 'fa-solid fa-robot',
     userAvatar: 'fa-solid fa-user',
     placeholder: 'Ask about our services...',
     welcomeMessage: "Hello. I'm here to help with questions about Astrux Marketing, our services, or requesting a free demo.",
 
-    // System Prompt - Professional, concise, no emojis
-    systemPrompt: `You are a professional assistant for Astrux Marketing, a web design agency. Be concise and direct.
+    // Clearer system prompt
+    systemPrompt: `You are Astrux Assistant, a professional customer service representative for Astrux Marketing.
 
-KEY FACTS:
-- Free demo first, pay only if satisfied
-- 48 hour average delivery
-- Industries: Dental, medical, gyms, restaurants, salons, retail, education
-- Hosting: Cloudflare Pages
-- Plans: Starter (3 pages), Standard (6 pages), Premium (unlimited)
-- Features: Mobile-first, SEO, WhatsApp integration, booking forms
-- Support: WhatsApp +91 6006555193, Telegram, email
+SERVICES:
+- Free website demo before payment
+- 48 hour delivery time
+- Dental, medical, gym, restaurant, salon, retail, education websites
+- Cloudflare Pages hosting
+- Starter (3 pages), Standard (6 pages), Premium (unlimited) plans
+- Mobile-first, SEO-ready, WhatsApp integration
 
-RULES:
-- Keep replies under 3 sentences
-- No emojis
-- No exclamation marks
-- Professional, helpful tone
-- Direct users to demo form or WhatsApp for complex questions
-- If unsure, say "Let me connect you with our team on WhatsApp: +91 6006555193"`,
+CONTACT:
+- WhatsApp: +91 6006555193
+- Telegram, Email available
 
-    // Pre-messages
-    preMessages: [
-      { role: 'system', content: null }
-    ]
+INSTRUCTIONS:
+- Greet users naturally when they say hi/hello/hey
+- Keep responses to 2-3 sentences
+- Be professional and helpful
+- Direct complex questions to WhatsApp
+- Never start with "Okay" or "Alright"
+- Do not use emojis`,
+
+    preMessages: [{ role: 'system', content: null }]
   };
 
-  // State
-  let isOpen = false;
-  let isTyping = false;
-  let messages = [];
-
-  // DOM Elements
+  let isOpen = false, isTyping = false, messages = [];
   let chatContainer, chatToggle, chatWindow, messagesContainer, inputField, sendBtn;
 
-  // Initialize
   function init() {
     createStyles();
     createDOM();
     attachEvents();
-
     CONFIG.preMessages[0].content = CONFIG.systemPrompt;
     addMessage('bot', CONFIG.welcomeMessage);
   }
 
-  // Create Styles
   function createStyles() {
     const styles = document.createElement('style');
     styles.textContent = `
@@ -69,7 +57,6 @@ RULES:
         z-index: 4999;
         font-family: 'DM Sans', sans-serif;
       }
-
       #astrux-chat-toggle {
         width: 54px;
         height: 54px;
@@ -82,15 +69,11 @@ RULES:
         justify-content: center;
         font-size: 1.3rem;
         box-shadow: 0 6px 28px rgba(221, 46, 24, 0.38);
-        transition: transform 0.3s, box-shadow 0.3s;
+        transition: transform 0.3s;
         position: relative;
         color: #000;
       }
-
-      #astrux-chat-toggle:hover {
-        transform: scale(1.08);
-      }
-
+      #astrux-chat-toggle:hover { transform: scale(1.08); }
       #astrux-chat-toggle .pulse {
         position: absolute;
         inset: -5px;
@@ -100,12 +83,10 @@ RULES:
         pointer-events: none;
         z-index: -1;
       }
-
       @keyframes astruxPulse {
         0% { transform: scale(1); opacity: 0.22; }
         100% { transform: scale(1.65); opacity: 0; }
       }
-
       #astrux-chat-window {
         position: absolute;
         bottom: 70px;
@@ -127,13 +108,11 @@ RULES:
         transition: opacity 0.28s, transform 0.28s;
         box-shadow: 0 18px 56px rgba(0, 0, 0, 0.65);
       }
-
       #astrux-chat-window.open {
         opacity: 1;
         pointer-events: all;
         transform: translateY(0) scale(1);
       }
-
       #astrux-chat-header {
         background: linear-gradient(135deg, #FFAB00, #DD2E18);
         padding: 16px 20px;
@@ -141,7 +120,6 @@ RULES:
         align-items: center;
         gap: 12px;
       }
-
       #astrux-chat-header .avatar {
         width: 40px;
         height: 40px;
@@ -153,18 +131,13 @@ RULES:
         font-size: 1.1rem;
         color: #000;
       }
-
-      #astrux-chat-header .info {
-        flex: 1;
-      }
-
+      #astrux-chat-header .info { flex: 1; }
       #astrux-chat-header .name {
         font-family: 'Outfit', sans-serif;
         font-weight: 700;
         font-size: 0.95rem;
         color: #000;
       }
-
       #astrux-chat-header .status {
         font-size: 0.7rem;
         color: rgba(0, 0, 0, 0.7);
@@ -172,7 +145,6 @@ RULES:
         align-items: center;
         gap: 6px;
       }
-
       #astrux-chat-header .status-dot {
         width: 8px;
         height: 8px;
@@ -180,7 +152,6 @@ RULES:
         border-radius: 50%;
         animation: blink 2s infinite;
       }
-
       #astrux-chat-close {
         width: 32px;
         height: 32px;
@@ -195,11 +166,7 @@ RULES:
         font-size: 0.9rem;
         transition: background 0.2s;
       }
-
-      #astrux-chat-close:hover {
-        background: rgba(0, 0, 0, 0.25);
-      }
-
+      #astrux-chat-close:hover { background: rgba(0, 0, 0, 0.25); }
       #astrux-messages {
         flex: 1;
         overflow-y: auto;
@@ -209,37 +176,26 @@ RULES:
         gap: 12px;
         scroll-behavior: smooth;
       }
-
-      #astrux-messages::-webkit-scrollbar {
-        width: 6px;
-      }
-
-      #astrux-messages::-webkit-scrollbar-track {
-        background: transparent;
-      }
-
+      #astrux-messages::-webkit-scrollbar { width: 6px; }
+      #astrux-messages::-webkit-scrollbar-track { background: transparent; }
       #astrux-messages::-webkit-scrollbar-thumb {
         background: rgba(255, 171, 0, 0.2);
         border-radius: 3px;
       }
-
       .astrux-message {
         display: flex;
         gap: 10px;
         max-width: 85%;
         animation: fadeUp 0.3s ease;
       }
-
       .astrux-message.user {
         align-self: flex-end;
         flex-direction: row-reverse;
       }
-
       @keyframes fadeUp {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
       }
-
       .astrux-message .avatar {
         width: 32px;
         height: 32px;
@@ -250,18 +206,15 @@ RULES:
         font-size: 0.9rem;
         flex-shrink: 0;
       }
-
       .astrux-message.bot .avatar {
         background: linear-gradient(135deg, #FFAB00, #DD2E18);
         color: #000;
       }
-
       .astrux-message.user .avatar {
         background: #141416;
         border: 1px solid rgba(255, 171, 0, 0.2);
         color: var(--text);
       }
-
       .astrux-message .bubble {
         padding: 12px 16px;
         border-radius: 18px;
@@ -269,28 +222,24 @@ RULES:
         line-height: 1.6;
         word-wrap: break-word;
       }
-
       .astrux-message.bot .bubble {
         background: #141416;
         color: #F0EDE8;
         border: 1px solid rgba(255, 171, 0, 0.1);
         border-bottom-left-radius: 4px;
       }
-
       .astrux-message.user .bubble {
         background: linear-gradient(135deg, #FFAB00, #DD2E18);
         color: #000;
         font-weight: 500;
         border-bottom-right-radius: 4px;
       }
-
       .astrux-typing {
         display: flex;
         gap: 4px;
         padding: 16px;
         align-items: center;
       }
-
       .astrux-typing span {
         width: 8px;
         height: 8px;
@@ -298,15 +247,12 @@ RULES:
         border-radius: 50%;
         animation: typing 1.4s infinite ease-in-out both;
       }
-
       .astrux-typing span:nth-child(1) { animation-delay: -0.32s; }
       .astrux-typing span:nth-child(2) { animation-delay: -0.16s; }
-
       @keyframes typing {
         0%, 80%, 100% { transform: scale(0); }
         40% { transform: scale(1); }
       }
-
       #astrux-chat-input-area {
         padding: 16px 20px;
         border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -314,7 +260,6 @@ RULES:
         gap: 10px;
         background: #0a0a0b;
       }
-
       #astrux-chat-input {
         flex: 1;
         background: rgba(255, 255, 255, 0.03);
@@ -327,16 +272,11 @@ RULES:
         outline: none;
         transition: border-color 0.2s, box-shadow 0.2s;
       }
-
       #astrux-chat-input:focus {
         border-color: #FFAB00;
         box-shadow: 0 0 0 3px rgba(255, 171, 0, 0.07);
       }
-
-      #astrux-chat-input::placeholder {
-        color: #5a5a5a;
-      }
-
+      #astrux-chat-input::placeholder { color: #5a5a5a; }
       #astrux-chat-send {
         width: 44px;
         height: 44px;
@@ -351,16 +291,11 @@ RULES:
         font-size: 1rem;
         transition: transform 0.2s, opacity 0.2s;
       }
-
-      #astrux-chat-send:hover:not(:disabled) {
-        transform: scale(1.05);
-      }
-
+      #astrux-chat-send:hover:not(:disabled) { transform: scale(1.05); }
       #astrux-chat-send:disabled {
         opacity: 0.5;
         cursor: not-allowed;
       }
-
       @media (max-width: 480px) {
         #astrux-chat-window {
           width: calc(100vw - 40px);
@@ -372,7 +307,6 @@ RULES:
     document.head.appendChild(styles);
   }
 
-  // Create DOM
   function createDOM() {
     chatContainer = document.createElement('div');
     chatContainer.id = 'astrux-chat-container';
@@ -409,7 +343,6 @@ RULES:
     sendBtn = document.getElementById('astrux-chat-send');
   }
 
-  // Attach Events
   function attachEvents() {
     chatToggle.addEventListener('click', toggleChat);
     document.getElementById('astrux-chat-close').addEventListener('click', toggleChat);
@@ -420,29 +353,23 @@ RULES:
         sendMessage();
       }
     });
-
     document.addEventListener('click', (e) => {
-      if (isOpen && !chatContainer.contains(e.target)) {
-        toggleChat();
-      }
+      if (isOpen && !chatContainer.contains(e.target)) toggleChat();
     });
   }
 
-  // Toggle Chat
   function toggleChat() {
     isOpen = !isOpen;
     chatWindow.classList.toggle('open', isOpen);
     const icon = chatToggle.querySelector('i');
     icon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-comment-dots';
     chatToggle.setAttribute('aria-label', isOpen ? 'Close chat' : 'Open chat');
-
     if (isOpen) {
       inputField.focus();
       scrollToBottom();
     }
   }
 
-  // Add Message
   function addMessage(role, content) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `astrux-message ${role}`;
@@ -452,44 +379,36 @@ RULES:
     `;
     messagesContainer.appendChild(messageDiv);
     scrollToBottom();
-
     messages.push({ role, content });
   }
 
-  // Show Typing
   function showTyping() {
     const typingDiv = document.createElement('div');
     typingDiv.id = 'astrux-typing-indicator';
     typingDiv.className = 'astrux-message bot';
     typingDiv.innerHTML = `
       <div class="avatar"><i class="${CONFIG.botAvatar}"></i></div>
-      <div class="bubble astrux-typing">
-        <span></span><span></span><span></span>
-      </div>
+      <div class="bubble astrux-typing"><span></span><span></span><span></span></div>
     `;
     messagesContainer.appendChild(typingDiv);
     scrollToBottom();
   }
 
-  // Hide Typing
   function hideTyping() {
     const typing = document.getElementById('astrux-typing-indicator');
     if (typing) typing.remove();
   }
 
-  // Scroll to Bottom
   function scrollToBottom() {
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
   }
 
-  // Escape HTML
   function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
 
-  // Send Message
   async function sendMessage() {
     const content = inputField.value.trim();
     if (!content || isTyping) return;
