@@ -54,8 +54,52 @@ export async function onRequestPost(context) {
       });
     }
 
-    // Stream the response back to client
-    return new Response(response.body, {
+    // Create a TransformStream to strip thinking tags
+    const { readable, writable } = new TransformStream({
+      transform(chunk, controller) {
+        const text = new TextDecoder().decode(chunk);
+        const lines = text.split('\n');
+
+        for (const line of lines) {
+          if (line.trim() === '' || line === 'data: [DONE]') {
+            controller.enqueue(new TextEncoder().encode(line + '\n'));
+            continue;
+          }
+
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.slice(6));
+              const content = data.choices?.[0]?.delta?.content;
+
+              if (content) {
+                // Strip Qwen's thinking tags
+                const cleanContent = content
+                  .replace(/<think>[\s\S]*?<\/think>/g, '')
+                  .replace(/Thinking:[\s\S]*?\n\n/g, '')
+                  .trim();
+
+                if (cleanContent) {
+                  data.choices[0].delta.content = cleanContent;
+                  controller.enqueue(new TextEncoder().encode('data: ' + JSON.stringify(data) + '\n'));
+                }
+              } else {
+                controller.enqueue(new TextEncoder().encode(line + '\n'));
+              }
+            } catch (e) {
+              controller.enqueue(new TextEncoder().encode(line + '\n'));
+            }
+          } else {
+            controller.enqueue(new TextEncoder().encode(line + '\n'));
+          }
+        }
+      }
+    });
+
+    // Pipe the response through our transformer
+    response.body.pipeTo(writable);
+
+    // Stream the cleaned response back to client
+    return new Response(readable, {
       headers: {
         ...corsHeaders,
         'Content-Type': 'text/event-stream',
