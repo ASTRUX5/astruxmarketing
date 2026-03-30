@@ -26,9 +26,7 @@ export async function onRequestPost(context) {
       if (m.role === 'system') {
         return {
           ...m,
-          content: m.content + '
-
-IMPORTANT: Reply naturally to greetings. Do not say "Okay" or "Alright". Give a proper helpful response.'
+          content: m.content + "\n\nIMPORTANT: Reply naturally to greetings. Do not say 'Okay' or 'Alright'. Give a proper helpful response."
         };
       }
       return m;
